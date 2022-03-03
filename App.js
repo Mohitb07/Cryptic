@@ -8,43 +8,62 @@
 
 import React from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
+  StatusBar,
+  FlatList,
+  SafeAreaView,
 } from 'react-native';
 
 import ListItem from './components/ListItem';
+import {SAMPLE_DATA} from './assets/data/sampleData';
+
+const ListHeader = () => (
+  <>
+    <View style={styles.headerContainer}>
+      <Text style={styles.largeTitle}>Markets</Text>
+    </View>
+    <View style={styles.divider} />
+  </>
+);
 
 const App = () => {
-  // const isDarkMode = useColorScheme() === 'dark';
   return (
-    <View style={styles.container}>
-      {/* <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} /> */}
-      <View style={styles.headerContainer}>
-        <Text style={styles.largeTitle}>Markets</Text>
-      </View>
-      <View style={styles.divider} />
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
 
-      <ListItem />
-    </View>
+      <FlatList
+        keyExtractor={item => item.id}
+        data={SAMPLE_DATA}
+        renderItem={({item}) => (
+          <>
+            <ListItem
+              name={item.name}
+              symbol={item.symbol}
+              currentPrice={item.current_price}
+              priceChangePercentage={
+                item.price_change_percentage_7d_in_currency
+              }
+              logoUrl={item.image}
+              // onPress={() => openModal(item)}
+            />
+          </>
+        )}
+        ListHeaderComponent={<ListHeader />}
+      />
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     backgroundColor: '#fff',
   },
 
   headerContainer: {
-    // marginTop: 20,
-    paddingVertical: 14,
+    marginTop: 20,
     paddingHorizontal: 16,
   },
   largeTitle: {
@@ -53,7 +72,7 @@ const styles = StyleSheet.create({
     color: '#000',
   },
   divider: {
-    height: StyleSheet.hairlineWidth,
+    height: 0.7,
     backgroundColor: '#A9ABB1',
     marginHorizontal: 16,
     marginTop: 16,
